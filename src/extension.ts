@@ -1,33 +1,38 @@
-import * as vscode from 'vscode';
+import * as vscode from 'vscode'
+
+function autoScroll(editor: vscode.TextEditor) {
+  const visibleRange = editor.visibleRanges[0]
+  if (!visibleRange) {
+    vscode.window.showErrorMessage('Could not determine the visible range.')
+    return
+  }
+
+  //const outputChannel = vscode.window.createOutputChannel('My Extension')
+
+  const interval = setInterval(() => {
+    if (editor.visibleRanges[0].end.line === editor.document.lineCount - 1) {
+      clearInterval(interval)
+      return
+    }
+
+    //outputChannel.appendLine(`${editor.visibleRanges[0].end.line} / ${editor.document.lineCount}`)
+
+    vscode.commands.executeCommand('editorScroll', { to: 'down', by: 'pixel', value: 1 })
+  }, 50)
+}
 
 export function activate(context: vscode.ExtensionContext) {
-    const command = 'vscode-auto-scroll.scroll';
-    const disposable = vscode.commands.registerCommand(command, () => {
-        const editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            vscode.window.showErrorMessage('No active editor found!');
-            return;
-        }
+  const disposable = vscode.commands.registerCommand('vscode-auto-scroll.scroll', () => {
+    const editor = vscode.window.activeTextEditor
+    if (!editor) {
+      vscode.window.showErrorMessage('No active editor found!')
+      return
+    }
 
-        const lines = editor.document.lineCount;
-        let currentLine = 0;
+    autoScroll(editor)
+  })
 
-        const interval = setInterval(() => {
-            if (currentLine >= lines) {
-                clearInterval(interval);
-                return;
-            }
-
-            editor.revealRange(
-                new vscode.Range(currentLine, 0, currentLine, 0),
-                vscode.TextEditorRevealType.Default
-            );
-
-            currentLine++;
-        }, 50); 
-    });
-
-    context.subscriptions.push(disposable);
+  context.subscriptions.push(disposable)
 }
 
 export function deactivate() {}

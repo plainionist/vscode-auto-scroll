@@ -1,14 +1,16 @@
 {
   "name": "vscode-auto-scroll",
   "displayName": "vscode-auto-scroll",
-  "description": "",
-  "version": "0.0.1",
+  "description": "Automatic smooth editor scrolling",
+  "version": "0.1.0",
+  "publisher": "plainionist",
   "engines": {
     "vscode": "^1.96.0"
   },
   "repository": {
     "type": "git",
-    "url": ""},
+    "url": "https://github.com/plainionist/vscode-auto-scroll"
+  },
   "categories": [
     "Other"
   ],
